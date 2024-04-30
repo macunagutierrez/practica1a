@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any
     
     stages {
         stage('Hello') {
@@ -19,7 +19,7 @@ pipeline {
                 echo 'Comprobaciones de descarga de repositorio'
                 echo WORKSPACE
                 bat 'dir'
-                stash includes: '*', name:'gitrepo'
+                stash includes: '/**', name:'gitrepo'
             }
         }
         stage('Build') {
@@ -27,9 +27,7 @@ pipeline {
                 echo 'Stage Build no hace nada'
             }
         }
-        stage('TESTING') {
-            parallel {
-                stage('TEST unitarios') {
+        stage('TEST unitarios') {
                     agent {label 'linux'}
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE'){
@@ -40,7 +38,7 @@ pipeline {
                                 python --version
                                 python -m pytest --junitxml=result-unit.xml test/unit
                             '''
-                            stash includes: '*', name:'agente1'
+                            stash includes: '/**', name:'agente1'
                         }
                     }
         }
@@ -59,11 +57,11 @@ pipeline {
                         python --version
                         python -m pytest --junitxml=result-rest.xml test/rest
                     '''
-                     stash includes: '*', name:'agente2'
+                     stash includes: '/**', name:'agente2'
             }
         }
-            }
-        }
+        
+        
          stage('Result') {
             steps {
                 unstash 'agente1'
