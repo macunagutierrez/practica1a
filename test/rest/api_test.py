@@ -49,7 +49,7 @@ class TestApi(unittest.TestCase):
             response.status, http.client.OK, f"Error en la petición API a {url}"
         )
         self.assertEqual(
-            response.read().decode(), "7", "ERROR Substract"
+            response.read().decode(), "7.0", "ERROR Substract"
         )
 
 if __name__ == "__main__":  # pragma: no cover
