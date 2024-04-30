@@ -10,7 +10,7 @@ pipeline {
         stage('GIT') {
             steps {
                 echo 'Download git repository'
-                git 'https://github.com/macunagutierrez/helloworld.git'
+                git 'https://github.com/macunagutierrez/practica1a.git'
             } 
         }
          stage('Comprobaciones') {
