@@ -6,7 +6,6 @@ from urllib.request import urlopen
 import pytest
 
 BASE_URL = "http://localhost:5000"
-BASE_URL_MOCK = "http://localhost:9090"
 DEFAULT_TIMEOUT = 2  # in secs
 
 @pytest.mark.api
@@ -25,14 +24,32 @@ class TestApi(unittest.TestCase):
             response.read().decode(), "3", "ERROR ADD"
         )
 
-    def test_api_sqrt(self):
-        url = f"{BASE_URL_MOCK}/calc/sqrt/64"
+    def test_api_subtract(self):
+        url = f"{BASE_URL}/calc/substract/6/4"
         response = urlopen(url, timeout=DEFAULT_TIMEOUT)
         self.assertEqual(
             response.status, http.client.OK, f"Error en la petición API a {url}"
         )
         self.assertEqual(
-            response.read().decode(), "8", "ERROR SQRT"
+            response.read().decode(), "2", "ERROR Substract"
+        )
+    def test_api_multiply(self):
+        url = f"{BASE_URL}/calc/product/10/4"
+        response = urlopen(url, timeout=DEFAULT_TIMEOUT)
+        self.assertEqual(
+            response.status, http.client.OK, f"Error en la petición API a {url}"
+        )
+        self.assertEqual(
+            response.read().decode(), "40", "ERROR Substract"
+        )
+    def test_api_division(self):
+        url = f"{BASE_URL}/calc/division/14/2"
+        response = urlopen(url, timeout=DEFAULT_TIMEOUT)
+        self.assertEqual(
+            response.status, http.client.OK, f"Error en la petición API a {url}"
+        )
+        self.assertEqual(
+            response.read().decode(), "7", "ERROR Substract"
         )
 
 if __name__ == "__main__":  # pragma: no cover
