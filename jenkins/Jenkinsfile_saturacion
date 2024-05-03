@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+                bat 'whoami'
+            } 
+        }
+        stage('GIT') {
+            steps {
+                echo 'Download git repository'
+                git branch: 'develop', url: 'https://github.com/macunagutierrez/practica1a.git'
+            } 
+        }
+         stage('Comprobaciones') {
+            steps {
+                echo 'Comprobaciones de descarga de repositorio'
+                echo WORKSPACE
+                bat 'dir'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Stage Build no hace nada'
+            }
+        }
+        stage('TEST unitarios') {
+                    steps {
+                            bat '''
+                                whoami
+                                set PYTHONPATH=%WORKSPACE%
+                                python --version
+                                python -m pytest --junitxml=result-unit.xml test/unit
+                            '''     
+                    }
+        }
+        stage('TEST integracion') {
+            steps {
+                    bat '''
+                        whoami
+                        set PYTHONPATH=%WORKSPACE%
+                        set FLASK_APP=app/api.py
+                        start flask run
+
+                        python --version
+                        python -m pytest --junitxml=result-rest.xml test/rest
+                    '''
+            }
+        }
+        
+        
+         stage('Result') {
+            steps {
+                junit 'result*.xml'
+                echo 'FINISH!!!'
+            }
+        }
+    }
+}

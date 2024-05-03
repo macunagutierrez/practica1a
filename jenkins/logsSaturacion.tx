@@ -1,0 +1,143 @@
+Lanzada por el usuario admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins  in C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Hello)
+[Pipeline] echo
+Hello World
+[Pipeline] bat
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>whoami
+nt authority\system
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (GIT)
+[Pipeline] echo
+Download git repository
+[Pipeline] git
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/macunagutierrez/practica1a.git
+ > git.exe init C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4 # timeout=10
+Fetching upstream changes from https://github.com/macunagutierrez/practica1a.git
+ > git.exe --version # timeout=10
+ > git --version # 'git version 2.44.0.windows.1'
+ > git.exe fetch --tags --force --progress -- https://github.com/macunagutierrez/practica1a.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git.exe config remote.origin.url https://github.com/macunagutierrez/practica1a.git # timeout=10
+ > git.exe config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git.exe rev-parse "refs/remotes/origin/develop^{commit}" # timeout=10
+Checking out Revision e58a8cd7c377d654c02578d01130661b862dbbdc (refs/remotes/origin/develop)
+ > git.exe config core.sparsecheckout # timeout=10
+ > git.exe checkout -f e58a8cd7c377d654c02578d01130661b862dbbdc # timeout=10
+ > git.exe branch -a -v --no-abbrev # timeout=10
+ > git.exe checkout -b develop e58a8cd7c377d654c02578d01130661b862dbbdc # timeout=10
+Commit message: "Se adjuntan los logs"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Comprobaciones)
+[Pipeline] echo
+Comprobaciones de descarga de repositorio
+[Pipeline] echo
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4
+[Pipeline] bat
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>dir
+ El volumen de la unidad C no tiene etiqueta.
+ El n�mero de serie del volumen es: 9427-9190
+
+ Directorio de C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4
+
+03/05/2024  17:11    <DIR>          .
+03/05/2024  17:11    <DIR>          ..
+03/05/2024  17:11                40 .gitignore
+03/05/2024  17:11    <DIR>          app
+03/05/2024  17:11    <DIR>          jenkins
+03/05/2024  17:11               175 pytest.ini
+03/05/2024  17:11               418 README.md
+03/05/2024  17:11    <DIR>          test
+               3 archivos            633 bytes
+               5 dirs  446.030.561.280 bytes libres
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] echo
+Stage Build no hace nada
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (TEST unitarios)
+[Pipeline] bat
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>whoami
+nt authority\system
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>set PYTHONPATH=C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4 
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>python --version 
+Python 3.11.9
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>python -m pytest --junitxml=result-unit.xml test/unit 
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-8.1.1, pluggy-1.5.0
+rootdir: C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4
+configfile: pytest.ini
+collected 11 items
+
+test\unit\calc_test.py .........                                         [ 81%]
+test\unit\util_test.py ..                                                [100%]
+
+- generated xml file: C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4\result-unit.xml -
+============================= 11 passed in 0.35s ==============================
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (TEST integracion)
+[Pipeline] bat
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>whoami
+nt authority\system
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>set PYTHONPATH=C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4 
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>set FLASK_APP=app/api.py 
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>start flask run 
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>python --version 
+Python 3.11.9
+
+C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4>python -m pytest --junitxml=result-rest.xml test/rest 
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-8.1.1, pluggy-1.5.0
+rootdir: C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4
+configfile: pytest.ini
+collected 4 items
+
+test\rest\api_test.py ....                                               [100%]
+
+- generated xml file: C:\ProgramData\Jenkins\.jenkins\workspace\P24\practica1.1\apartado4\result-rest.xml -
+============================== 4 passed in 8.37s ==============================
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Result)
+[Pipeline] junit
+Grabando resultados de tests
+[Checks API] No suitable checks publisher found.
+[Pipeline] echo
+FINISH!!!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
