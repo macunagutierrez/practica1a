@@ -11,7 +11,7 @@ pipeline {
         stage('GIT') {
             steps {
                 echo 'Download git repository'
-                git branch: 'develop', url: 'https://github.com/macunagutierrez/practica1a.git'
+                git branch: 'feature/feature_fix_racecond', url: 'https://github.com/macunagutierrez/practica1a.git'
             } 
         }
          stage('Comprobaciones') {
