@@ -11,25 +11,27 @@ pipeline {
                 stash includes: '/**', name:'gitrepo'
             }
         }
+    stage('TESTING CODE PERFORMANCE') {
+        parallel {
         stage('Unit') {
-                        agent {label 'linux'}
-                        steps {
-                            catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                                unstash 'gitrepo'
-                                bat '''
-                                    whoami
-                                    hostname
-                                    echo ${WORKSPACE}
-                                    set PYTHONPATH=%WORKSPACE%
-                                    python --version
-                                    python -m pytest --junitxml=result-unit.xml test/unit
-                                '''
-                                stash includes: '/result*.xml', name:'unit'
-                            }
-                        }
+                agent any
+                steps {
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        unstash 'gitrepo'
+                        bat '''
+                            whoami
+                            hostname
+                            echo ${WORKSPACE}
+                            set PYTHONPATH=%WORKSPACE%
+                            python --version
+                            python -m pytest --junitxml=result-unit.xml test/unit
+                        '''
+                        stash includes: '/**', name:'unit'
                     }
+                }
+        }
         stage('TEST integracion') {
-            agent {label 'linux'}
+            agent any
             steps {
                     unstash 'gitrepo'
                     bat '''
@@ -40,15 +42,12 @@ pipeline {
                         set FLASK_APP=app/api.py
                         start flask run
                         start java -jar C:\\unir\\programas\\wiremock-standalone-3.5.4.jar --port 9090 --root-dir test\\wiremock
-                        sleep(time: 10, unit: 'SECONDS')
-                        python -m pytest --junitxml=result-rest.xml test/rest
                     '''
-                    unstash 'unit'
-                    junit 'result*.xml'
+                    bat 'python -m pytest --junitxml=result-rest.xml test/rest'
+                    stash includes: '/**', name:'rest'
             }
         }
-        stage('TESTING CODE PERFORMANCE') {
-             parallel {
+        
                     stage('STATIC') {
                          agent any
                             steps {
@@ -107,9 +106,24 @@ pipeline {
                             }
                         }
                     } 
+                  
              }
         }
+          stage('JUNIT') {
+                        agent any
+                        steps {
+                            unstash 'unit'
+                            unstash 'rest'
+                            junit 'result*.xml'
+                        }
+                       
+                    }
         
        
+    }
+     post {
+        always {
+            cleanWs()
+        }
     }
 }
